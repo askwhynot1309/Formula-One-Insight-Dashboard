@@ -16,6 +16,5 @@ namespace Models
         public ICollection<RaceResult> Results { get; set; }
         public Circuit Circuit { get; set; }
         public ICollection<Laptime> QualifyingTimes { get; set; }
-        public ICollection<Driver> Drivers { get; set; }
     }
 }

@@ -11,6 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<F1DbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<Repository.DriverRepository>();
+builder.Services.AddScoped<Services.DriverService>();
+builder.Services.AddScoped<Services.IDriverService, Services.DriverService>();
 
 var app = builder.Build();
 
