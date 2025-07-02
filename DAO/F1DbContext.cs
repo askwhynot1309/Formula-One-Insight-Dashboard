@@ -12,6 +12,7 @@ namespace DAO
         public DbSet<Race> Races { get; set; }
         public DbSet<RaceResult> RaceResults { get; set; }
         public DbSet<Circuit> Circuits { get; set; }
+        public DbSet<Laptime> Laptime { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +41,11 @@ namespace DAO
                 .WithMany(r => r.Results)
                 .HasForeignKey(rr => rr.RaceId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Race>()
+                .HasMany(r => r.Laptimes)
+                .WithOne(l => l.Race)
+                .HasForeignKey(l => l.RaceId);
         }
     }
 

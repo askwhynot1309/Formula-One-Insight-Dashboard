@@ -1,11 +1,7 @@
 ﻿using DAO;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Models.DTO;
 
 namespace Repository
 {
@@ -23,11 +19,11 @@ namespace Repository
             return await _context.Circuits.AsQueryable().ToListAsync();
         }
 
-        public async Task<Circuit> GetCircuitDetailsAsync(int circuitId)
+        public async Task<(Circuit Circuit, List<FastestLapDto> FastestLaps)> GetCircuitDetailsAsync(int circuitId)
         {
             // Get the circuit
             var circuit = await _context.Circuits.FirstOrDefaultAsync(c => c.Id == circuitId);
-            if (circuit == null) return null;
+            if (circuit == null) return (null, null);
 
             // Get all races at this circuit
             var races = await _context.Races
@@ -36,33 +32,38 @@ namespace Repository
                     .ThenInclude(rr => rr.Driver)
                 .Include(r => r.Results)
                     .ThenInclude(rr => rr.Team)
+                .Include(r => r.Laptimes)
                 .ToListAsync();
 
-            // Prepare fastest lap per year
-            var fastestLaps = new Dictionary<int, Models.DTO.FastestLapDto>();
+            // Prepare fastest lap list (flat structure)
+            var fastestLaps = new List<FastestLapDto>();
             foreach (var race in races)
             {
-                var year = race.Date.Year;
-                var fastest = race.Results
-                    .Where(rr => rr.FastestLap)
-                    .OrderBy(rr => rr.Position)
-                    .FirstOrDefault();
-                if (fastest != null)
+                // Find the fastest lap in the Laptime table for this race
+                var fastestLap = await _context.Laptime
+                    .Where(l => l.RaceId == race.Id)
+                    .OrderBy(l => l.LapTime)
+                    .Include(l => l.Driver)
+                    .FirstOrDefaultAsync();
+
+                if (fastestLap != null)
                 {
-                    fastestLaps[year] = new Models.DTO.FastestLapDto
+                    var driver = fastestLap.Driver;
+                    var team = await _context.Teams.FirstOrDefaultAsync(t => t.Id == driver.TeamId);
+                    var fastestLapDto = new FastestLapDto
                     {
-                        Year = year,
-                        DriverName = fastest.Driver != null ? fastest.Driver.FirstName + " " + fastest.Driver.LastName : null,
-                        TeamName = fastest.Team?.Name,
-                        LapTime = TimeSpan.Zero, // You may want to fetch from Laptime if available
+                        DriverName = driver != null ? driver.FirstName + " " + driver.LastName : null,
+                        TeamName = team?.Name,
+                        LapTime = fastestLap.LapTime,
                         RaceName = race.Name
                     };
+                    
+                    // Add this fastest lap to the list
+                    fastestLaps.Add(fastestLapDto);
                 }
             }
 
-            // Attach to circuit (not persisted, just for DTO)
-            circuit.GetType().GetProperty("FastestLapsPerYear")?.SetValue(circuit, fastestLaps);
-            return circuit;
+            return (circuit, fastestLaps);
         }
     }
 }
