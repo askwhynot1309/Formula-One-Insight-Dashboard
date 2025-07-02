@@ -15,6 +15,7 @@ builder.Services.AddDbContext<F1DbContext>(options =>
 builder.Services.AddScoped<Repository.DriverRepository>();
 builder.Services.AddScoped<Repository.TeamRepository>();
 builder.Services.AddScoped<Repository.CircuitRepository>();
+builder.Services.AddScoped<Repository.RaceResultRepository>();
 //--------------------------------------------------------------------------------------------------------------------------------//
 builder.Services.AddScoped<Services.DriverService>();
 builder.Services.AddScoped<Services.IDriverService, Services.DriverService>();
@@ -22,6 +23,8 @@ builder.Services.AddScoped<Services.TeamService>();
 builder.Services.AddScoped<Services.ITeamService, Services.TeamService>();
 builder.Services.AddScoped<Services.CircuitService>();
 builder.Services.AddScoped<Services.ICircuitService, Services.CircuitService>();
+builder.Services.AddScoped<Services.RaceResultService>();
+builder.Services.AddScoped<Services.IRaceResultService, Services.RaceResultService>();
 
 var app = builder.Build();
 

@@ -35,7 +35,6 @@ namespace Repository
                 .Include(r => r.Laptimes)
                 .ToListAsync();
 
-            // Prepare fastest lap list (flat structure)
             var fastestLaps = new List<FastestLapDto>();
             foreach (var race in races)
             {
