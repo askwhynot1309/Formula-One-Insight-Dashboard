@@ -12,6 +12,6 @@ namespace Models.DTO
         public string Name { get; set; }
         public string Country { get; set; }
         public DateTime Date { get; set; }
-        public Circuit Circuit { get; set; }
+        public string CircuitName { get; set; }
     }
 }

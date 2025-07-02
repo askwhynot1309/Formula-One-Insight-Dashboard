@@ -16,6 +16,7 @@ builder.Services.AddScoped<Repository.DriverRepository>();
 builder.Services.AddScoped<Repository.TeamRepository>();
 builder.Services.AddScoped<Repository.CircuitRepository>();
 builder.Services.AddScoped<Repository.RaceResultRepository>();
+builder.Services.AddScoped<Repository.RaceRepository>();
 //--------------------------------------------------------------------------------------------------------------------------------//
 builder.Services.AddScoped<Services.DriverService>();
 builder.Services.AddScoped<Services.IDriverService, Services.DriverService>();
@@ -25,6 +26,8 @@ builder.Services.AddScoped<Services.CircuitService>();
 builder.Services.AddScoped<Services.ICircuitService, Services.CircuitService>();
 builder.Services.AddScoped<Services.RaceResultService>();
 builder.Services.AddScoped<Services.IRaceResultService, Services.RaceResultService>();
+builder.Services.AddScoped<Services.RaceService>();
+builder.Services.AddScoped<Services.IRaceService, Services.RaceService>();
 
 var app = builder.Build();
 
