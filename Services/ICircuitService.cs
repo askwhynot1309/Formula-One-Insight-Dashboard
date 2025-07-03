@@ -11,7 +11,6 @@ namespace Services
     public interface ICircuitService
     {
         Task<List<Circuit>> GetCircuitsAsync();
-
         Task<CircuitDetailsDto> GetCircuitDetailsAsync(int circuitId);
     }
 }

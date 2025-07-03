@@ -1,6 +1,7 @@
 ﻿using DAO;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,47 @@ namespace Repository
                 .Where(t => t.Id == teamId)
                 .Include(t => t.Drivers)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> UpdateTeamDetailsAsync(TeamUpdateDto dto)
+        {
+            var team = await GetTeamDetailsAsync(dto.Id);
+            if (team!= null)
+            {
+                team.Name = dto.Name;
+                team.Description = dto.Description;
+                team.Country = dto.Country;
+                team.TeamPrincipal = dto.TeamPrincipal;
+                team.FoundedYear = dto.FoundedYear;
+                team.LogoUrl = dto.LogoUrl;
+                team.BaseLocation = dto.BaseLocation;
+                team.EngineSuppliers = dto.EngineSuppliers;
+            } else
+            {
+                return false;
+            }
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> AddNewTeam(AddTeamDto team)
+        {
+            var teamDto = new Team();
+            
+            teamDto.Name = team.Name;
+            teamDto.Country = team.Country;
+            teamDto.Description = team.Description;
+            teamDto.TeamPrincipal = team.TeamPrincipal;
+            teamDto.FoundedYear = team.FoundedYear;
+            teamDto.LogoUrl = team.LogoUrl;
+            teamDto.BaseLocation = team.BaseLocation;
+            teamDto.EngineSuppliers = team.EngineSuppliers;
+
+            await _context.Teams.AddAsync(teamDto);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

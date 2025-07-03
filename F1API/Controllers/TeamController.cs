@@ -63,5 +63,37 @@ namespace F1API.Controllers
 
             return Ok(teamDto);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateDriverDetailsAsync(int? id, [FromBody] TeamUpdateDto dto)
+        {
+            if (id != dto.Id)
+            {
+                return BadRequest("Id does not match");
+            }
+
+            var check = await _teamService.UpdateTeamDetailsAsync(dto);
+            if (!check)
+            {
+                return BadRequest();
+            }
+            return Ok(dto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTeamAsync([FromBody] AddTeamDto dto)
+        {
+            if (dto == null)
+            {
+                return BadRequest();
+            }
+            var check = await _teamService.AddTeamAsync(dto);
+            if (!check)
+            {
+                return BadRequest();
+            }
+
+            return Ok(dto);
+        }
     }
 }

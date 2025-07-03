@@ -18,7 +18,6 @@ namespace F1API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RaceResultDto>>> GetRaceResultDetailsAsync(int raceId)
         {
-            //could use try catch for better debug
             var result = await _raceResultService.GetRaceResultDetailsAsync(raceId);
 
             var raceResultDto = result.Select(rr => new RaceResultDto
@@ -42,6 +41,23 @@ namespace F1API.Controllers
             }).ToList();
 
             return Ok(raceResultDto);
+        }
+
+        [HttpPost("import-race-results")]
+        public async Task<IActionResult> ImportRaceResults([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            using var stream = file.OpenReadStream();
+            var importList = Repository.Helper.CsvHelper.ParseCsv(stream);
+
+            var errors = await _raceResultService.ImportRaceResultsAsync(importList);
+
+            if (errors.Any())
+                return BadRequest(new { Errors = errors });
+
+            return Ok("Import successful!");
         }
     }
 }

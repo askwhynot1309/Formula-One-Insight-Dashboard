@@ -56,5 +56,27 @@ namespace F1API.Controllers
             };
             return Ok(driverDetailsDto);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewDriver([FromBody] AddDriverDto dto)
+        {
+            var check = await _driverService.AddDriverAsync(dto);
+            if (!check)
+            {
+                return BadRequest();
+            }
+            return Ok(dto);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateDriverDetailsAsync(int id, [FromBody] DriverDetailsUpdateDto dto)
+        {
+            var check = await _driverService.UpdateDriverDetailsAsync(dto);
+            if (!check)
+            {
+                return BadRequest();
+            }
+            return Ok(dto);
+        }
     }
 } 

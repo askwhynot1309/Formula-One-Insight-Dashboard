@@ -21,5 +21,10 @@ namespace Services
         {
             return await _raceResultRepository.GetRaceResultAsync(raceId);
         }
+
+        public async Task<List<string>> ImportRaceResultsAsync(List<ImportRaceResultDto> importList)
+        {
+            return await _raceResultRepository.ImportRaceResultsAsync(importList);
+        }
     }
 }

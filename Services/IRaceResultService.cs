@@ -11,5 +11,6 @@ namespace Services
     public interface IRaceResultService
     {
         Task<List<RaceResult>> GetRaceResultDetailsAsync(int raceId);
+        Task<List<string>> ImportRaceResultsAsync(List<ImportRaceResultDto> importList);
     }
 }
