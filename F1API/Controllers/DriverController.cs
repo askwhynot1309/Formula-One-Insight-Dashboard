@@ -4,7 +4,7 @@ using Models.DTO;
 using Models;
 
 namespace F1API.Controllers
-{
+{   
     [ApiController]
     [Route("api/[controller]")]
     public class DriverController : ControllerBase
