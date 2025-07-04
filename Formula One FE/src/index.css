@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f0f2f5;
+}
+
+#root {
+  height: 100vh;
+}
+
+/* Remove any conflicting styles */
+.logo {
+  /* Override the default logo styles */
+  height: auto !important;
+  padding: 0 !important;
+  will-change: auto !important;
+  transition: none !important;
+}
+
+.logo:hover {
+  filter: none !important;
+}
+
+.logo.react:hover {
+  filter: none !important;
+}

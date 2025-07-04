@@ -1,0 +1,42 @@
+/* Custom styles for the F1 Dashboard */
+.ant-layout-sider {
+  box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
+}
+
+.ant-layout-header {
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ant-layout-content {
+  background: #f0f2f5;
+}
+
+.ant-layout-footer {
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Custom logo styling */
+.logo {
+  background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%) !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+}
+
+/* Content area styling */
+.content-wrapper {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ant-layout-sider {
+    position: fixed;
+    height: 100vh;
+    z-index: 999;
+  }
+}
