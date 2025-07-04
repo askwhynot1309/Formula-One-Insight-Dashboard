@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Typography, Card, Row, Col, Statistic } from 'antd';
+import { Layout, Menu, Typography, Card, Row, Col, Statistic, Spin, Alert } from 'antd';
 import {
   DashboardOutlined,
   CarOutlined,
@@ -8,38 +8,151 @@ import {
   FlagOutlined,
   TableOutlined
 } from '@ant-design/icons';
+import { useApi } from './hooks/useApi';
+import { circuitAPI, driverAPI, teamAPI, raceAPI } from './api/services';
+import ApiStatus from './components/ApiStatus';
+import CircuitsPage from './components/CircuitsPage';
+import DriversPage from './components/DriversPage';
+import TeamsPage from './components/TeamsPage';
+import RacesPage from './components/RacesPage';
+import ResultsPage from './components/ResultsPage';
+import { Routes, Route, useNavigate, useLocation, matchPath } from 'react-router-dom';
 import './App.css';
+import DriverDetailsPage from './components/DriverDetailsPage';
+import CircuitDetailsPage from './components/CircuitDetailsPage';
 
 const { Header, Sider, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 
+const Dashboard: React.FC = () => {
+  // API hooks for dashboard statistics
+  const { data: circuits, loading: circuitsLoading, error: circuitsError } = useApi(circuitAPI.getCircuits);
+  const { data: drivers, loading: driversLoading, error: driversError } = useApi(() => driverAPI.getDrivers({ status: 'Active' }));
+  const { data: teams, loading: teamsLoading, error: teamsError } = useApi(teamAPI.getTeams);
+  const { data: races, loading: racesLoading, error: racesError } = useApi(() => raceAPI.getRacesByYear(2024));
+
+  // Calculate statistics
+  const totalCircuits = circuits?.length || 0;
+  const activeDrivers = drivers?.length || 0;
+  const totalTeams = teams?.length || 0;
+  const racesThisSeason = races?.length || 0;
+
+  // Check if any API calls are loading
+  const isLoading = circuitsLoading || driversLoading || teamsLoading || racesLoading;
+  
+  // Check if there are any errors
+  const hasError = circuitsError || driversError || teamsError || racesError;
+
+  return (
+    <div>
+      <Title level={3} style={{ marginBottom: 24 }}>Welcome to the Formula One Insight</Title>
+      <Paragraph style={{ fontSize: 16, marginBottom: 32 }}>
+        Explore circuits, drivers, teams, races, and results using the navigation menu. This web provides insights and data visualizations for Formula One enthusiasts and analysts.
+      </Paragraph>
+      <ApiStatus />
+      {hasError && (
+        <Alert
+          message="API Error"
+          description="There was an error loading the dashboard data. Please check if the backend server is running."
+          type="error"
+          showIcon
+          style={{ marginBottom: 24 }}
+        />
+      )}
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="Total Circuits"
+              value={totalCircuits}
+              prefix={<FlagOutlined />}
+              valueStyle={{ color: '#1890ff' }}
+              loading={circuitsLoading}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="Active Drivers"
+              value={activeDrivers}
+              prefix={<CarOutlined />}
+              valueStyle={{ color: '#52c41a' }}
+              loading={driversLoading}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="Teams"
+              value={totalTeams}
+              prefix={<TeamOutlined />}
+              valueStyle={{ color: '#722ed1' }}
+              loading={teamsLoading}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="Races This Season"
+              value={racesThisSeason}
+              prefix={<TrophyOutlined />}
+              valueStyle={{ color: '#fa8c16' }}
+              loading={racesLoading}
+            />
+          </Card>
+        </Col>
+      </Row>
+      {isLoading && !hasError && (
+        <div style={{ textAlign: 'center', marginTop: 24 }}>
+          <Spin size="large" />
+          <Paragraph style={{ marginTop: 16 }}>Loading dashboard data...</Paragraph>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const menuItems = [
+  { key: '/', icon: <DashboardOutlined />, label: 'Dashboard' },
+  { key: '/circuits', icon: <FlagOutlined />, label: 'Circuits' },
+  { key: '/drivers', icon: <CarOutlined />, label: 'Drivers' },
+  { key: '/teams', icon: <TeamOutlined />, label: 'Teams' },
+  { key: '/races', icon: <TrophyOutlined />, label: 'Races' },
+  { key: '/results', icon: <TableOutlined />, label: 'Results' },
+];
+
+function getSelectedMenuKey(pathname: string) {
+  if (matchPath('/circuits/*', pathname) || pathname.startsWith('/circuits')) return '/circuits';
+  if (matchPath('/drivers/*', pathname) || pathname.startsWith('/drivers')) return '/drivers';
+  if (matchPath('/teams/*', pathname) || pathname.startsWith('/teams')) return '/teams';
+  if (matchPath('/races/*', pathname) || pathname.startsWith('/races')) return '/races';
+  if (matchPath('/results/*', pathname) || pathname.startsWith('/results')) return '/results';
+  return '/';
+}
+
 function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Use improved logic for selectedKey
+  const selectedKey = getSelectedMenuKey(location.pathname);
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider breakpoint="lg" collapsedWidth="0">
         <div className="logo">
           F1 Insight
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['dashboard']}>
-          <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-            Dashboard
-          </Menu.Item>
-          <Menu.Item key="circuits" icon={<FlagOutlined />}>
-            Circuits
-          </Menu.Item>
-          <Menu.Item key="drivers" icon={<CarOutlined />}>
-            Drivers
-          </Menu.Item>
-          <Menu.Item key="teams" icon={<TeamOutlined />}>
-            Teams
-          </Menu.Item>
-          <Menu.Item key="races" icon={<TrophyOutlined />}>
-            Races
-          </Menu.Item>
-          <Menu.Item key="results" icon={<TableOutlined />}>
-            Results
-          </Menu.Item>
-        </Menu>
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[selectedKey]}
+          onClick={({ key }) => navigate(key)}
+          items={menuItems}
+        />
       </Sider>
       <Layout>
         <Header style={{ background: '#fff', padding: '0 24px', display: 'flex', alignItems: 'center' }}>
@@ -47,53 +160,16 @@ function App() {
         </Header>
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <div className="content-wrapper" style={{ padding: 24, minHeight: 360 }}>
-            <Title level={3} style={{ marginBottom: 24 }}>Welcome to the Formula One Insight</Title>
-            <Paragraph style={{ fontSize: 16, marginBottom: 32 }}>
-              Explore circuits, drivers, teams, races, and results using the navigation menu. This web provides insights and data visualizations for Formula One enthusiasts and analysts.
-            </Paragraph>
-            
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={12} lg={6}>
-                <Card>
-                  <Statistic
-                    title="Total Circuits"
-                    value={23}
-                    prefix={<FlagOutlined />}
-                    valueStyle={{ color: '#1890ff' }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={12} lg={6}>
-                <Card>
-                  <Statistic
-                    title="Active Drivers"
-                    value={20}
-                    prefix={<CarOutlined />}
-                    valueStyle={{ color: '#52c41a' }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={12} lg={6}>
-                <Card>
-                  <Statistic
-                    title="Teams"
-                    value={10}
-                    prefix={<TeamOutlined />}
-                    valueStyle={{ color: '#722ed1' }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={12} lg={6}>
-                <Card>
-                  <Statistic
-                    title="Races This Season"
-                    value={24}
-                    prefix={<TrophyOutlined />}
-                    valueStyle={{ color: '#fa8c16' }}
-                  />
-                </Card>
-              </Col>
-            </Row>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/circuits" element={<CircuitsPage />} />
+              <Route path="/circuits/:id" element={<CircuitDetailsPage />} />
+              <Route path="/drivers" element={<DriversPage />} />
+              <Route path="/drivers/:id" element={<DriverDetailsPage />} />
+              <Route path="/teams" element={<TeamsPage />} />
+              <Route path="/races" element={<RacesPage />} />
+              <Route path="/results" element={<ResultsPage />} />
+            </Routes>
           </div>
         </Content>
         <Footer style={{ textAlign: 'center', background: '#fff' }}>
