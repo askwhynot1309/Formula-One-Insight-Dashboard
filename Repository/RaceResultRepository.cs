@@ -26,6 +26,7 @@ namespace Repository
                 .Include(rr => rr.Race)
                     .ThenInclude(rr => rr.Circuit)
                 .Where(rr => rr.RaceId == raceId)
+                .OrderBy(rr => rr.Position)
                 .AsQueryable().ToListAsync();
 
             return await query;

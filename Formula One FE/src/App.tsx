@@ -6,7 +6,6 @@ import {
   TeamOutlined,
   TrophyOutlined,
   FlagOutlined,
-  TableOutlined
 } from '@ant-design/icons';
 import { useApi } from './hooks/useApi';
 import { circuitAPI, driverAPI, teamAPI, raceAPI } from './api/services';
@@ -15,7 +14,6 @@ import CircuitsPage from './components/CircuitsPage';
 import DriversPage from './components/DriversPage';
 import TeamsPage from './components/TeamsPage';
 import RacesPage from './components/RacesPage';
-import ResultsPage from './components/ResultsPage';
 import { Routes, Route, useNavigate, useLocation, matchPath } from 'react-router-dom';
 import './App.css';
 import DriverDetailsPage from './components/DriverDetailsPage';
@@ -121,7 +119,6 @@ const menuItems = [
   { key: '/drivers', icon: <CarOutlined />, label: 'Drivers' },
   { key: '/teams', icon: <TeamOutlined />, label: 'Teams' },
   { key: '/races', icon: <TrophyOutlined />, label: 'Races' },
-  { key: '/results', icon: <TableOutlined />, label: 'Results' },
 ];
 
 function getSelectedMenuKey(pathname: string) {
@@ -129,7 +126,6 @@ function getSelectedMenuKey(pathname: string) {
   if (matchPath('/drivers/*', pathname) || pathname.startsWith('/drivers')) return '/drivers';
   if (matchPath('/teams/*', pathname) || pathname.startsWith('/teams')) return '/teams';
   if (matchPath('/races/*', pathname) || pathname.startsWith('/races')) return '/races';
-  if (matchPath('/results/*', pathname) || pathname.startsWith('/results')) return '/results';
   return '/';
 }
 
@@ -143,9 +139,6 @@ function App() {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider breakpoint="lg" collapsedWidth="0">
-        <div className="logo">
-          F1 Insight
-        </div>
         <Menu
           theme="dark"
           mode="inline"
@@ -156,7 +149,7 @@ function App() {
       </Sider>
       <Layout>
         <Header style={{ background: '#fff', padding: '0 24px', display: 'flex', alignItems: 'center' }}>
-          <Title level={2} style={{ margin: 0, color: '#1890ff' }}>Formula One Insight Dashboard</Title>
+          <Title level={2} style={{ margin: 0, color: '#1890ff' }}>Formula One Insight</Title>
         </Header>
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <div className="content-wrapper" style={{ padding: 24, minHeight: 360 }}>
@@ -168,7 +161,6 @@ function App() {
               <Route path="/drivers/:id" element={<DriverDetailsPage />} />
               <Route path="/teams" element={<TeamsPage />} />
               <Route path="/races" element={<RacesPage />} />
-              <Route path="/results" element={<ResultsPage />} />
             </Routes>
           </div>
         </Content>

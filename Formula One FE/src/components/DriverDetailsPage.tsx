@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useApiWithParams } from '../hooks/useApi';
 import { driverAPI } from '../api/services';
 import type { DriverDetails } from '../api/services';
-import { Card, Typography, Spin, Alert, Descriptions } from 'antd';
+import { Card, Typography, Spin, Alert, Descriptions, Row, Col } from 'antd';
 
 const { Title } = Typography;
 
@@ -11,6 +11,7 @@ const DriverDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const driverId = id ? parseInt(id, 10) : undefined;
   const { data, loading, error } = useApiWithParams<DriverDetails, number>(driverAPI.getDriverDetails, driverId!);
+  const [imageError, setImageError] = useState(false);
 
   if (!driverId) return <Alert type="error" message="Invalid driver ID" showIcon />;
 
@@ -22,25 +23,38 @@ const DriverDetailsPage: React.FC = () => {
       {error && <Alert type="error" message="Error loading driver details" description={error} showIcon style={{ marginBottom: 16 }} />}
       {data && (
         <Card>
-          <Descriptions bordered column={1} size="middle">
-            <Descriptions.Item label="ID">{data.id}</Descriptions.Item>
-            <Descriptions.Item label="First Name">{data.firstName}</Descriptions.Item>
-            <Descriptions.Item label="Last Name">{data.lastName}</Descriptions.Item>
-            <Descriptions.Item label="Number">{data.number}</Descriptions.Item>
-            <Descriptions.Item label="Nationality">{data.nationality}</Descriptions.Item>
-            <Descriptions.Item label="Race Wins">{data.raceWin}</Descriptions.Item>
-            <Descriptions.Item label="Race Starts">{data.raceStart}</Descriptions.Item>
-            <Descriptions.Item label="Date of Birth">{data.dateOfBirth}</Descriptions.Item>
-            <Descriptions.Item label="Image">
-              {data.imageUrl ? <img src={data.imageUrl} alt="Driver" style={{ maxWidth: 200 }} /> : 'N/A'}
-            </Descriptions.Item>
-            <Descriptions.Item label="Debut Year">{data.debutYear}</Descriptions.Item>
-            <Descriptions.Item label="Status">{data.status}</Descriptions.Item>
-            <Descriptions.Item label="Podiums">{data.podiums}</Descriptions.Item>
-            <Descriptions.Item label="Poles">{data.poles}</Descriptions.Item>
-            <Descriptions.Item label="Fastest Laps">{data.fastestLaps}</Descriptions.Item>
-            <Descriptions.Item label="Team Name">{data.teamName}</Descriptions.Item>
-          </Descriptions>
+          <Row gutter={[32, 16]} align="middle">
+            <Col xs={24} md={16}>
+              <Descriptions bordered column={1} size="middle">
+                <Descriptions.Item label="ID">{data.id}</Descriptions.Item>
+                <Descriptions.Item label="First Name">{data.firstName}</Descriptions.Item>
+                <Descriptions.Item label="Last Name">{data.lastName}</Descriptions.Item>
+                <Descriptions.Item label="Number">{data.number}</Descriptions.Item>
+                <Descriptions.Item label="Nationality">{data.nationality}</Descriptions.Item>
+                <Descriptions.Item label="Race Wins">{data.raceWin}</Descriptions.Item>
+                <Descriptions.Item label="Race Starts">{data.raceStart}</Descriptions.Item>
+                <Descriptions.Item label="Date of Birth">{data.dateOfBirth}</Descriptions.Item>
+                <Descriptions.Item label="Debut Year">{data.debutYear}</Descriptions.Item>
+                <Descriptions.Item label="Status">{data.status}</Descriptions.Item>
+                <Descriptions.Item label="Podiums">{data.podiums}</Descriptions.Item>
+                <Descriptions.Item label="Poles">{data.poles}</Descriptions.Item>
+                <Descriptions.Item label="Fastest Laps">{data.fastestLaps}</Descriptions.Item>
+                <Descriptions.Item label="Team Name">{data.teamName}</Descriptions.Item>
+              </Descriptions>
+            </Col>
+            <Col xs={24} md={8} style={{ textAlign: 'center' }}>
+              {data.imageUrl && data.imageUrl.trim() !== '' && !imageError ? (
+                <img
+                  src={data.imageUrl}
+                  alt="Driver"
+                  style={{ maxWidth: 220, width: '100%', borderRadius: 12, boxShadow: '0 2px 16px rgba(0,0,0,0.12)', background: '#f0f0f0', margin: '0 auto' }}
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <div style={{ color: '#888', fontStyle: 'italic', marginTop: 32 }}>No image available</div>
+              )}
+            </Col>
+          </Row>
         </Card>
       )}
     </div>

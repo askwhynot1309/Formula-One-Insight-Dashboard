@@ -47,9 +47,21 @@ const CircuitDetailsPage: React.FC = () => {
             <Descriptions.Item label="Description">{data.description}</Descriptions.Item>
             <Descriptions.Item label="Type">{data.type}</Descriptions.Item>
             <Descriptions.Item label="Location">{data.location}</Descriptions.Item>
-            <Descriptions.Item label="Image">
+            {/* <Descriptions.Item label="Image">
               {data.imageUrl ? <img src={data.imageUrl} alt="Circuit" style={{ maxWidth: 300 }} /> : 'N/A'}
-            </Descriptions.Item>
+            </Descriptions.Item> */}
+            <Descriptions.Item label="Image">
+              {data.imageUrl && data.imageUrl.trim() !== '' ? (
+                <img
+                  src={data.imageUrl}
+                  alt="Circuit"
+                  style={{ maxWidth: 300, borderRadius: 8, background: '#f0f0f0' }}
+                  onError={e => (e.currentTarget.style.display = 'none')}
+                />
+              ) : (
+                'N/A'
+              )}
+          </Descriptions.Item>
           </Descriptions>
           <Title level={4} style={{ marginTop: 24 }}>Fastest Laps Per Year</Title>
           <Table<FastestLap>

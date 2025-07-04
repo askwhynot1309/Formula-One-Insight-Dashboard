@@ -29,6 +29,7 @@ namespace Services
                 Description = circuit.Description,
                 Type = circuit.Type,
                 Location = circuit.Location,
+                ImageUrl = circuit.ImageUrl,
                 FastestLapsPerYear = fastestLaps ?? new List<FastestLapDto>()
             };
         }
