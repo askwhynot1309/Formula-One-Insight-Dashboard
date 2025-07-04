@@ -18,6 +18,7 @@ import { Routes, Route, useNavigate, useLocation, matchPath } from 'react-router
 import './App.css';
 import DriverDetailsPage from './components/DriverDetailsPage';
 import CircuitDetailsPage from './components/CircuitDetailsPage';
+import TeamDetailsPage from './components/TeamDetailsPage';
 
 const { Header, Sider, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
@@ -160,6 +161,7 @@ function App() {
               <Route path="/drivers" element={<DriversPage />} />
               <Route path="/drivers/:id" element={<DriverDetailsPage />} />
               <Route path="/teams" element={<TeamsPage />} />
+              <Route path="/teams/:id" element={<TeamDetailsPage />} />
               <Route path="/races" element={<RacesPage />} />
             </Routes>
           </div>
