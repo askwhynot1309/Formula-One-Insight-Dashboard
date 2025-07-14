@@ -13,7 +13,7 @@ const TeamsPage: React.FC = () => {
   return (
     <div>
       <Title level={2}>Teams</Title>
-      {error && <Alert type="error" message="Error loading teams" description={error} showIcon style={{ marginBottom: 16 }} />}
+      {error && <Alert type="error" message="Error loading teams" description={"Please login to view the data"} showIcon style={{ marginBottom: 16 }} />}
       <Table<Team>
         dataSource={data || []}
         loading={loading}

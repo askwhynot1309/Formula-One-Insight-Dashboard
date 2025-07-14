@@ -13,7 +13,7 @@ const CircuitsPage: React.FC = () => {
   return (
     <div>
       <Title level={2}>Circuits</Title>
-      {error && <Alert type="error" message="Error loading circuits" description={error} showIcon style={{ marginBottom: 16 }} />}
+      {error && <Alert type="error" message="Error loading circuits" description={"Please login to view the data"} showIcon style={{ marginBottom: 16 }} />}
       <Table<Circuit>
         dataSource={data || []}
         loading={loading}

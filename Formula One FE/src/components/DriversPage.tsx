@@ -13,7 +13,7 @@ const DriversPage: React.FC = () => {
   return (
     <div>
       <Title level={2}>Drivers</Title>
-      {error && <Alert type="error" message="Error loading drivers" description={error} showIcon style={{ marginBottom: 16 }} />}
+      {error && <Alert type="error" message="Error loading drivers" description={"Please login to view the data"} showIcon style={{ marginBottom: 16 }} />}
       <Table<Driver>
         dataSource={data || []}
         loading={loading}

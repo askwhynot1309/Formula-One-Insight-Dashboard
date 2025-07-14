@@ -60,7 +60,7 @@ const RacesPage: React.FC = () => {
           ))}
         </Select>
       </Title>
-      {error && <Alert type="error" message="Error loading races" description={error} showIcon style={{ marginBottom: 16 }} />}
+      {error && <Alert type="error" message="Error loading races" description={"Please login to view the data"} showIcon style={{ marginBottom: 16 }} />}
       <Table<Race>
         dataSource={data || []}
         loading={loading}

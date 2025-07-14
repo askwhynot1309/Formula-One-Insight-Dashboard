@@ -28,13 +28,13 @@ import Dashboard from './components/Dashboard';
 const { Header, Sider, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 
-const menuItems = [
+const baseMenuItems = [
   { key: '/', icon: <DashboardOutlined />, label: 'Dashboard' },
   { key: '/circuits', icon: <FlagOutlined />, label: 'Circuits' },
   { key: '/drivers', icon: <CarOutlined />, label: 'Drivers' },
   { key: '/teams', icon: <TeamOutlined />, label: 'Teams' },
   { key: '/races', icon: <TrophyOutlined />, label: 'Races' },
-  { key: '/about', icon: <DashboardOutlined />, label: 'About the sport' }, // Added About the sport
+  { key: '/about', icon: <DashboardOutlined />, label: 'About the sport' }, // Added About the sport  
 ];
 
 // About the sport page component
@@ -83,18 +83,18 @@ const AboutTheSportPage = () => (
   </div>
 );
 
-function getSelectedMenuKey(pathname: string) {
+function getSelectedMenuKey(pathname: string, role?: string) {
   if (matchPath('/circuits/*', pathname) || pathname.startsWith('/circuits')) return '/circuits';
   if (matchPath('/drivers/*', pathname) || pathname.startsWith('/drivers')) return '/drivers';
   if (matchPath('/teams/*', pathname) || pathname.startsWith('/teams')) return '/teams';
   if (matchPath('/races/*', pathname) || pathname.startsWith('/races')) return '/races';
-  if (matchPath('/about', pathname)) return '/about'; // Added about route
+  if (matchPath('/about', pathname)) return '/about';
+  if (role === "admin" && pathname.startsWith("/admin")) return "/admin";
   return '/';
 }
 
 function AppRoutes() {
   const { user } = useAuth();
-  console.log(user?.role);
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -120,8 +120,12 @@ function AppRoutes() {
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const selectedKey = getSelectedMenuKey(location.pathname);
   const { user, logout } = useAuth();
+  const selectedKey = getSelectedMenuKey(location.pathname, user?.role);
+
+  const menuItems = user?.role === "admin"
+    ? [{ key: '/admin', icon: <DashboardOutlined />, label: 'Admin' }, ...baseMenuItems]
+    : baseMenuItems;
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -134,12 +138,13 @@ function App() {
             selectedKeys={[selectedKey]}
             onClick={({ key }) => navigate(key)}
             items={menuItems}
+            // overflowedIndicator={null}
             style={{ minWidth: 500, fontSize: 16, borderBottom: 'none', background: 'transparent' }}
           />
           <div>
             {user ? (
               <span style={{ marginLeft: 16 }}>
-                Welcome, <b>{user.username}</b> ({user.role})
+                Welcome, <b>{user.username}</b>
                 <Button type="link" onClick={logout} style={{ marginLeft: 8 }}>Logout</Button>
               </span>
             ) : (

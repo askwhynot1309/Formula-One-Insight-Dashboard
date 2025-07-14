@@ -1,9 +1,11 @@
-import React from 'react';
-import { Typography, Card, Row, Col, Statistic, Spin, Alert } from 'antd';
+import React, { useState } from "react";
+import { Typography, Card, Row, Col, Statistic, Spin, Alert, Button } from 'antd';
 import { FlagOutlined, CarOutlined, TeamOutlined, TrophyOutlined } from '@ant-design/icons';
 import { useApi } from '../hooks/useApi';
 import { circuitAPI, driverAPI, teamAPI, raceAPI } from '../api/services';
 import ApiStatus from './ApiStatus';
+import AddTeamModal from "./AddTeamModal";
+import AddDriverModal from "./AddDriverModal";
 
 const { Title, Paragraph } = Typography;
 
@@ -25,8 +27,23 @@ const Dashboard: React.FC = () => {
   // Check if there are any errors
   const hasError = circuitsError || driversError || teamsError || racesError;
 
+  const [teamModalOpen, setTeamModalOpen] = useState(false);
+  const [driverModalOpen, setDriverModalOpen] = useState(false);
+
   return (
     <div>
+      <section style={{ marginBottom: 32 }}>
+        <h2>Teams</h2>
+        <Button type="primary" onClick={() => setTeamModalOpen(true)}>Add Team</Button>
+        <AddTeamModal open={teamModalOpen} onClose={() => setTeamModalOpen(false)} />
+        {/* ...existing team table/list... */}
+      </section>
+      <section style={{ marginBottom: 32 }}>
+        <h2>Drivers</h2>
+        <Button type="primary" onClick={() => setDriverModalOpen(true)}>Add Driver</Button>
+        <AddDriverModal open={driverModalOpen} onClose={() => setDriverModalOpen(false)} />
+        {/* ...existing driver table/list... */}
+      </section>
       <Title level={3} style={{ marginBottom: 24 }}>Welcome to the Formula One Insight</Title>
       <Paragraph style={{ fontSize: 16, marginBottom: 32 }}>
         Explore circuits, drivers, teams, races, and results using the navigation menu. This web provides insights and data visualizations for Formula One enthusiasts and analysts.
