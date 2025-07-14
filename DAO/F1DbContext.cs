@@ -13,6 +13,7 @@ namespace DAO
         public DbSet<RaceResult> RaceResults { get; set; }
         public DbSet<Circuit> Circuits { get; set; }
         public DbSet<Laptime> Laptime { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +47,12 @@ namespace DAO
                 .HasMany(r => r.Laptimes)
                 .WithOne(l => l.Race)
                 .HasForeignKey(l => l.RaceId);
+
+            // User configuration
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username).IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email).IsUnique();
         }
     }
 
