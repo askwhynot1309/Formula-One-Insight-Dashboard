@@ -94,18 +94,13 @@ function getSelectedMenuKey(pathname: string) {
 
 function AppRoutes() {
   const { user } = useAuth();
+  console.log(user?.role);
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/admin"
-        element={
-          user && user.role === "Admin" ? (
-            <Dashboard />
-          ) : (
-            <Navigate to="/home" />
-          )
-        }
+        element = {<AdminPage/>}
       />
       <Route path="/home" element={<HomePage />} />
       <Route path="/" element={<Navigate to="/home" />} />

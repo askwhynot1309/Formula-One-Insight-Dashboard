@@ -19,6 +19,7 @@ const LoginPage: React.FC = () => {
       login(res.data.token);
       message.success("Login successful!");
       if (res.data.role === "Admin") {
+        console.log("Navigating to admin");
         navigate("/admin");
       } else {
         navigate("/home");
