@@ -1,20 +1,13 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
-import { Card } from "antd";
+import Dashboard from "../components/Dashboard";
 
 const AdminPage: React.FC = () => {
   const { user } = useAuth();
-  if (!user) return <Navigate to="/login" />;
-  if (user.role !== "Admin") return <Navigate to="/" />;
-
-  return (
-    <Card>
-      <h2>Welcome, {user.username} (Admin)</h2>
-      <p>This is the admin dashboard.</p>
-      {/* Add admin features here */}
-    </Card>
-  );
+  if (user === null) return <div>Loading...</div>; // Wait for user to be set
+  if (user.role !== "Admin") return <Navigate to="/home" />;
+  return <Dashboard />;
 };
 
 export default AdminPage; 

@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+import api from "../api";
 import React, { useState } from "react";
 import { Form, Input, Button, Card, message } from "antd";
 import { useAuth } from "../context/AuthContext";
@@ -9,14 +11,16 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-const onFinish = async (values: { UserName: string; Password: string }) => {
+  const onFinish = async (values: { UserName: string; Password: string }) => {
     setLoading(true);
     try {
       const res = await api.post("/auth/login", values);
       login(res.data.token);
+      console.log("Logged in user role:", res.data.role);
       message.success("Login successful!");
       if (res.data.role === "Admin") {
-        navigate("/"); // Admin to dashboard
+        console.log("Navigating to admin");
+        navigate("/admin");
       } else {
         navigate("/home");
       }
@@ -30,7 +34,7 @@ const onFinish = async (values: { UserName: string; Password: string }) => {
   return (
     <Card title="Login" style={{ maxWidth: 400, margin: "80px auto" }}>
       <Form onFinish={onFinish}>
-        <Form.Item name="UserName" label="Username" rules={[{ required: true }]}>
+        <Form.Item name="UserName" label="Username">
           <Input />
         </Form.Item>
         <Form.Item name="Password" label="Password" rules={[{ required: true }]}> 

@@ -97,11 +97,10 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/admin" element={<AdminPage />} />
       <Route
-        path="/"
+        path="/admin"
         element={
-          user && user.role === "admin" ? (
+          user && user.role === "Admin" ? (
             <Dashboard />
           ) : (
             <Navigate to="/home" />
@@ -109,6 +108,7 @@ function AppRoutes() {
         }
       />
       <Route path="/home" element={<HomePage />} />
+      <Route path="/" element={<Navigate to="/home" />} />
       {/* Existing routes */}
       <Route path="/circuits" element={<CircuitsPage />} />
       <Route path="/circuits/:id" element={<CircuitDetailsPage />} />
