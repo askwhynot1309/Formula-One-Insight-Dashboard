@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-import api from "../api";
 import React, { useState } from "react";
 import { Form, Input, Button, Card, message } from "antd";
 import { useAuth } from "../context/AuthContext";
@@ -12,14 +10,15 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values: { UserName: string; Password: string }) => {
+    console.log("UserName:", values.UserName);
+    console.log("Password:", values.Password);
+
     setLoading(true);
     try {
       const res = await api.post("/auth/login", values);
       login(res.data.token);
-      console.log("Logged in user role:", res.data.role);
       message.success("Login successful!");
       if (res.data.role === "Admin") {
-        console.log("Navigating to admin");
         navigate("/admin");
       } else {
         navigate("/home");
@@ -34,10 +33,10 @@ const LoginPage: React.FC = () => {
   return (
     <Card title="Login" style={{ maxWidth: 400, margin: "80px auto" }}>
       <Form onFinish={onFinish}>
-        <Form.Item name="UserName" label="Username">
+        <Form.Item name="UserName" label="Username" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="Password" label="Password" rules={[{ required: true }]}> 
+        <Form.Item name="Password" label="Password" rules={[{ required: true }]}>
           <Input.Password />
         </Form.Item>
         <Form.Item>
@@ -50,4 +49,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage; 
+export default LoginPage;
