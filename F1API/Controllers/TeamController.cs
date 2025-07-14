@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.DTO;
 using Services;
 
 namespace F1API.Controllers
 {
+    [Authorize(Roles = "User, Admin")]
     [ApiController]
     [Route("api/[controller]")] 
     public class TeamController : Controller

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace F1API.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "User, Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class DriverController : ControllerBase
