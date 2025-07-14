@@ -27,14 +27,32 @@ namespace Services
             _repository = repository;
         }
 
-        public Task<string> GetRoleFromTokenAsync(string token)
+        public async Task<string> GetUsernameFromTokenAsync(string token)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadJwtToken(token);
+                return jwtToken.Claims.First(x => x.Type == ClaimTypes.Name).Value;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public Task<string> GetUsernameFromTokenAsync(string token)
+        public async Task<string> GetRoleFromTokenAsync(string token)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadJwtToken(token);
+                return jwtToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<AuthResponseDto> LoginAsync(LoginDto loginDto)

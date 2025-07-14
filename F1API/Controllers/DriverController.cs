@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Models.DTO;
 using Models;
 using Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace F1API.Controllers
 {
+    [Authorize(Roles = "User")]
     [ApiController]
     [Route("api/[controller]")]
     public class DriverController : ControllerBase
