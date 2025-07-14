@@ -25,7 +25,6 @@ type CircuitDetailsApi = {
 const CircuitDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const circuitId = id ? parseInt(id, 10) : undefined;
-  // Memoize the API call function
   const getCircuitDetails = useCallback((circuitId: number) => circuitAPI.getCircuitDetails(circuitId).then(res => ({ data: res.data })), []);
   const { data, loading, error } = useApiWithParams<CircuitDetailsApi, number>(getCircuitDetails, circuitId!);
 
@@ -63,14 +62,29 @@ const CircuitDetailsPage: React.FC = () => {
               )}
           </Descriptions.Item>
           </Descriptions>
-          <Title level={4} style={{ marginTop: 24 }}>Fastest Laps Per Year</Title>
+          <Title level={4} style={{ marginTop: 24 }}>Fastest Laps Each Year</Title>
           <Table<FastestLap>
             dataSource={data.fastestLapsPerYear || []}
             rowKey={row => `${row.driverName}-${row.teamName}-${row.raceName}`}
             columns={[
               { title: 'Driver', dataIndex: 'driverName', key: 'driverName' },
-              { title: 'Team', dataIndex: 'teamName', key: 'teamName' },
-              { title: 'Lap Time', dataIndex: 'lapTime', key: 'lapTime' },
+              {
+                title: 'Lap Time',
+                dataIndex: 'lapTime',
+                key: 'lapTime',
+                render: (text) => {
+                  if (!text) return '';
+                  
+                  const [hh, mm, rest] = text.split(':');
+                  const [ss, ms] = rest.split('.');
+
+                  const minutes = parseInt(mm, 10);
+                  const seconds = parseInt(ss, 10);
+                  const milliseconds = ms.slice(0, 3); // take first 3 digits only
+
+                  return `${minutes}:${seconds.toString().padStart(2, '0')}:${milliseconds}`;
+                }
+              },
               { title: 'Race', dataIndex: 'raceName', key: 'raceName' },
             ]}
             pagination={false}

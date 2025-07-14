@@ -19,7 +19,7 @@ const CircuitsPage: React.FC = () => {
         loading={loading}
         rowKey="id"
         columns={[
-          { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
+          // { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
           { title: 'Name', dataIndex: 'name', key: 'name' },
           { title: 'Location', dataIndex: 'location', key: 'location' },
           {

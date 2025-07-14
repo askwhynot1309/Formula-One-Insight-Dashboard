@@ -66,10 +66,15 @@ const RacesPage: React.FC = () => {
         loading={loading}
         rowKey="id"
         columns={[
-          { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
+          // { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
           { title: 'Country', dataIndex: 'country', key: 'country' },
           { title: 'Name', dataIndex: 'name', key: 'name' },
-          { title: 'Date', dataIndex: 'date', key: 'date' },
+          {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+            render: (text) => new Date(text).toISOString().split('T')[0]
+          },
           { title: 'Circuit', dataIndex: 'circuitName', key: 'circuitName' },
           {
             title: 'Race Result',

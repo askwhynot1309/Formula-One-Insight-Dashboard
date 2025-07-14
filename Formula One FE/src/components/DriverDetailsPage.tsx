@@ -33,7 +33,9 @@ const DriverDetailsPage: React.FC = () => {
                 <Descriptions.Item label="Nationality">{data.nationality}</Descriptions.Item>
                 <Descriptions.Item label="Race Wins">{data.raceWin}</Descriptions.Item>
                 <Descriptions.Item label="Race Starts">{data.raceStart}</Descriptions.Item>
-                <Descriptions.Item label="Date of Birth">{data.dateOfBirth}</Descriptions.Item>
+                <Descriptions.Item label="Date of Birth">
+                  {new Date(data.dateOfBirth).toISOString().split('T')[0]}
+                </Descriptions.Item>
                 <Descriptions.Item label="Debut Year">{data.debutYear}</Descriptions.Item>
                 <Descriptions.Item label="Status">{data.status}</Descriptions.Item>
                 <Descriptions.Item label="Podiums">{data.podiums}</Descriptions.Item>
