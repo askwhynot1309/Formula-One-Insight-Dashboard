@@ -130,7 +130,7 @@ const AddDriverModal: React.FC<{ open: boolean; onClose: () => void }> = ({
           <Col span={12}>
             <Form.Item name="imageUrl" label="Image URL">
               <Input />
-            </Form.Item>
+            </Form.Item>  
             <Form.Item
               name="debutYear"
               label="Debut Year"

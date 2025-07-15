@@ -4,11 +4,27 @@ import { useApi } from '../hooks/useApi';
 import { driverAPI } from '../api/services';
 import type { Driver } from '../api/services';
 import { Link } from 'react-router-dom';
+import UpdateDriverModal from './UpdateDriverModal';
+import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
 
 const { Title } = Typography;
 
 const DriversPage: React.FC = () => {
-  const { data, loading, error } = useApi<Driver[]>(() => driverAPI.getDrivers({}));
+  const { data, loading, error, refetch } = useApi<Driver[]>(() => driverAPI.getDrivers({}));
+  const { user } = useAuth();
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedDriver, setSelectedDriver] = useState<any>(null);
+
+  const handleUpdateClick = (driver: any) => {
+    setSelectedDriver(driver);
+    setUpdateModalOpen(true);
+  };
+
+  const handleUpdateClose = () => {
+    setUpdateModalOpen(false);
+    setSelectedDriver(null);
+  };
 
   return (
     <div>
@@ -29,11 +45,29 @@ const DriversPage: React.FC = () => {
           {
             title: 'Action',
             key: 'action',
-            render: (_, record) => <Link to={`/drivers/${record.id}`}>View Details</Link>,
+            render: (_, record) => (
+              <>
+                <Link to={`/drivers/${record.id}`}>View Details</Link>
+                {user?.role === 'admin' && (
+                  <>
+                    {' | '}
+                    <a onClick={() => handleUpdateClick(record)}>Update</a>
+                  </>
+                )}
+              </>
+            ),
           },
         ]}
         pagination={{ pageSize: 10 }}
       />
+      {updateModalOpen && selectedDriver && (
+        <UpdateDriverModal
+          open={updateModalOpen}
+          onClose={handleUpdateClose}
+          driver={selectedDriver}
+          onUpdated={refetch}
+        />
+      )}
     </div>
   );
 };
