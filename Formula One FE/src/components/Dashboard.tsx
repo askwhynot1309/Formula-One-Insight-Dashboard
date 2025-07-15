@@ -32,18 +32,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <div>
-      <section style={{ marginBottom: 32 }}>
-        <h2>Teams</h2>
-        <Button type="primary" onClick={() => setTeamModalOpen(true)}>Add Team</Button>
-        <AddTeamModal open={teamModalOpen} onClose={() => setTeamModalOpen(false)} />
-        {/* ...existing team table/list... */}
-      </section>
-      <section style={{ marginBottom: 32 }}>
-        <h2>Drivers</h2>
-        <Button type="primary" onClick={() => setDriverModalOpen(true)}>Add Driver</Button>
-        <AddDriverModal open={driverModalOpen} onClose={() => setDriverModalOpen(false)} />
-        {/* ...existing driver table/list... */}
-      </section>
       <Title level={3} style={{ marginBottom: 24 }}>Welcome to the Formula One Insight</Title>
       <Paragraph style={{ fontSize: 16, marginBottom: 32 }}>
         Explore circuits, drivers, teams, races, and results using the navigation menu. This web provides insights and data visualizations for Formula One enthusiasts and analysts.
@@ -58,7 +46,7 @@ const Dashboard: React.FC = () => {
           style={{ marginBottom: 24 }}
         />
       )}
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]} style={{marginBottom: 30}}>
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
@@ -110,6 +98,16 @@ const Dashboard: React.FC = () => {
           <Paragraph style={{ marginTop: 16 }}>Loading dashboard data...</Paragraph>
         </div>
       )}
+      <section style={{ marginBottom: 32 }}>
+        <h2>Teams</h2>
+        <Button type="primary" onClick={() => setTeamModalOpen(true)}>Add Team</Button>
+        <AddTeamModal open={teamModalOpen} onClose={() => setTeamModalOpen(false)} />
+      </section>
+      <section style={{ marginBottom: 32 }}>
+        <h2>Drivers</h2>
+        <Button type="primary" onClick={() => setDriverModalOpen(true)}>Add Driver</Button>
+        <AddDriverModal open={driverModalOpen} onClose={() => setDriverModalOpen(false)} />
+      </section>
     </div>
   );
 };
