@@ -43,7 +43,8 @@ const UpdateDriverModal: React.FC<UpdateDriverModalProps> = ({ open, onClose, dr
       if (values.dateOfBirth) {
         values.dateOfBirth = values.dateOfBirth.format("YYYY-MM-DD");
       }
-      await driverAPI.updateDriver(driver.id, values);
+      const payload = { ...values, id: driver.id };
+      await driverAPI.updateDriver(driver.id, payload);
       message.success("Driver updated successfully!");
       onUpdated();
       onClose();

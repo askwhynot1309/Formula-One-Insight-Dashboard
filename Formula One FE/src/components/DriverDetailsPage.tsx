@@ -3,7 +3,10 @@ import { useParams, Link } from 'react-router-dom';
 import { useApiWithParams } from '../hooks/useApi';
 import { driverAPI } from '../api/services';
 import type { DriverDetails } from '../api/services';
-import { Card, Typography, Spin, Alert, Descriptions, Row, Col } from 'antd';
+import { Card, Typography, Spin, Alert, Descriptions, Row, Col, Button } from 'antd';
+import UpdateDriverModal from './UpdateDriverModal';
+import { useAuth } from '../context/AuthContext';
+import { EditOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -12,6 +15,11 @@ const DriverDetailsPage: React.FC = () => {
   const driverId = id ? parseInt(id, 10) : undefined;
   const { data, loading, error } = useApiWithParams<DriverDetails, number>(driverAPI.getDriverDetails, driverId!);
   const [imageError, setImageError] = useState(false);
+  const { user } = useAuth();
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+
+  const handleUpdateClick = () => setUpdateModalOpen(true);
+  const handleUpdateClose = () => setUpdateModalOpen(false);
 
   if (!driverId) return <Alert type="error" message="Invalid driver ID" showIcon />;
 
@@ -19,6 +27,16 @@ const DriverDetailsPage: React.FC = () => {
     <div>
       <Link to="/drivers" style={{ marginBottom: 16, display: 'inline-block' }}>&larr; Back to Drivers</Link>
       <Title level={2}>Driver Details</Title>
+      {user?.role === 'admin' && data && (
+        <Button
+          type="primary"
+          icon={<EditOutlined />}
+          style={{ marginBottom: 16 }}
+          onClick={handleUpdateClick}
+        >
+          Update Driver
+        </Button>
+      )}
       {loading && <Spin />}
       {error && <Alert type="error" message="Error loading driver details" description={error} showIcon style={{ marginBottom: 16 }} />}
       {data && (
@@ -26,7 +44,7 @@ const DriverDetailsPage: React.FC = () => {
           <Row gutter={[32, 16]} align="middle">
             <Col xs={24} md={16}>
               <Descriptions bordered column={1} size="middle">
-                <Descriptions.Item label="ID">{data.id}</Descriptions.Item>
+                {/* <Descriptions.Item label="ID">{data.id}</Descriptions.Item> */}
                 <Descriptions.Item label="First Name">{data.firstName}</Descriptions.Item>
                 <Descriptions.Item label="Last Name">{data.lastName}</Descriptions.Item>
                 <Descriptions.Item label="Number">{data.number}</Descriptions.Item>
@@ -58,6 +76,14 @@ const DriverDetailsPage: React.FC = () => {
             </Col>
           </Row>
         </Card>
+      )}
+      {updateModalOpen && data && (
+        <UpdateDriverModal
+          open={updateModalOpen}
+          onClose={handleUpdateClose}
+          driver={{ ...data, id: driverId }}
+          onUpdated={() => { handleUpdateClose(); window.location.reload(); }}
+        />
       )}
     </div>
   );

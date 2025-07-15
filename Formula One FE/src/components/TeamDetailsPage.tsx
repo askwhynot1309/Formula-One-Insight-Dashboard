@@ -3,7 +3,10 @@ import { useParams, Link } from 'react-router-dom';
 import { useApiWithParams } from '../hooks/useApi';
 import { teamAPI } from '../api/services';
 import type { TeamDetails, Driver } from '../api/services';
-import { Card, Typography, Spin, Alert, Descriptions, Row, Col, Table } from 'antd';
+import { Card, Typography, Spin, Alert, Descriptions, Row, Col, Table, Button } from 'antd';
+import UpdateTeamModal from './UpdateTeamModal';
+import { useAuth } from '../context/AuthContext';
+import { EditOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -12,6 +15,11 @@ const TeamDetailsPage: React.FC = () => {
   const teamId = id ? parseInt(id, 10) : undefined;
   const { data, loading, error } = useApiWithParams<TeamDetails, number>(teamAPI.getTeamDetails, teamId!);
   const [logoError, setLogoError] = useState(false);
+  const { user } = useAuth();
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+
+  const handleUpdateClick = () => setUpdateModalOpen(true);
+  const handleUpdateClose = () => setUpdateModalOpen(false);
 
   if (!teamId) return <Alert type="error" message="Invalid team ID" showIcon />;
 
@@ -19,6 +27,16 @@ const TeamDetailsPage: React.FC = () => {
     <div>
       <Link to="/teams" style={{ marginBottom: 16, display: 'inline-block' }}>&larr; Back to Teams</Link>
       <Title level={2}>Team Details</Title>
+      {user?.role === 'admin' && data && (
+        <Button
+          type="primary"
+          icon={<EditOutlined />}
+          style={{ marginBottom: 16 }}
+          onClick={handleUpdateClick}
+        >
+          Update Team
+        </Button>
+      )}
       {loading && <Spin />}
       {error && <Alert type="error" message="Error loading team details" description={error} showIcon style={{ marginBottom: 16 }} />}
       {data && (
@@ -64,6 +82,14 @@ const TeamDetailsPage: React.FC = () => {
             style={{ marginTop: 16 }}
           />
         </Card>
+      )}
+      {updateModalOpen && data && (
+        <UpdateTeamModal
+          open={updateModalOpen}
+          onClose={handleUpdateClose}
+          team={{ ...data, id: teamId }}
+          onUpdated={() => { handleUpdateClose(); window.location.reload(); }}
+        />
       )}
     </div>
   );

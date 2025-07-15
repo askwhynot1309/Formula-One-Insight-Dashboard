@@ -20,7 +20,8 @@ const UpdateTeamModal: React.FC<UpdateTeamModalProps> = ({ open, onClose, team, 
 
   const onFinish = async (values: any) => {
     try {
-      await teamAPI.updateTeam(team.id, values);
+      const payload = { ...values, id: team.id };
+      await teamAPI.updateTeam(team.id, payload);
       message.success("Team updated successfully!");
       onUpdated();
       onClose();
