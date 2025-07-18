@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Typography, Spin, Alert, Tag } from 'antd';
+import { Table, Typography, Alert, Tag } from 'antd';
 import { useApi } from '../hooks/useApi';
 import { driverAPI } from '../api/services';
 import type { Driver } from '../api/services';

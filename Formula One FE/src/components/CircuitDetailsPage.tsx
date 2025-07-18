@@ -75,7 +75,7 @@ const CircuitDetailsPage: React.FC = () => {
                 render: (text) => {
                   if (!text) return '';
                   
-                  const [hh, mm, rest] = text.split(':');
+                  const [mm, rest] = text.split(':');
                   const [ss, ms] = rest.split('.');
 
                   const minutes = parseInt(mm, 10);

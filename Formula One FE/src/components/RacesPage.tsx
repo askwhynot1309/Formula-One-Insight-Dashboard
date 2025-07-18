@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Typography, Spin, Alert, Select, Button, Modal } from 'antd';
+import { Table, Typography, Alert, Select, Button, Modal } from 'antd';
 import { useApi } from '../hooks/useApi';
 import { raceAPI, raceResultAPI } from '../api/services';
 import type { Race, RaceResult } from '../api/services';

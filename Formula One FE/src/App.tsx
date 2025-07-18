@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Typography, Card, Row, Col, Statistic, Spin, Alert, Button } from 'antd';
+import { Layout, Menu, Typography, Card, Row, Col, Button } from 'antd';
 import {
   DashboardOutlined,
   CarOutlined,
@@ -7,9 +7,6 @@ import {
   TrophyOutlined,
   FlagOutlined,
 } from '@ant-design/icons';
-import { useApi } from './hooks/useApi';
-import { circuitAPI, driverAPI, teamAPI, raceAPI } from './api/services';
-import ApiStatus from './components/ApiStatus';
 import CircuitsPage from './components/CircuitsPage';
 import DriversPage from './components/DriversPage';
 import TeamsPage from './components/TeamsPage';
@@ -34,7 +31,7 @@ const baseMenuItems = [
   { key: '/drivers', icon: <CarOutlined />, label: 'Drivers' },
   { key: '/teams', icon: <TeamOutlined />, label: 'Teams' },
   { key: '/races', icon: <TrophyOutlined />, label: 'Races' },
-  { key: '/about', icon: <DashboardOutlined />, label: 'About the sport' }, // Added About the sport  
+  { key: '/about', icon: <DashboardOutlined />, label: 'About the sport' },
 ];
 
 // About the sport page component

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Typography, Spin, Alert } from 'antd';
+import { Table, Typography, Alert } from 'antd';
 import { useApi } from '../hooks/useApi';
 import { teamAPI } from '../api/services';
 import type { Team } from '../api/services';
