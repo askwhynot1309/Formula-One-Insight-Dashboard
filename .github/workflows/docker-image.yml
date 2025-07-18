@@ -16,22 +16,11 @@ jobs:
     - name: Build Docker images
       run: docker compose build
 
-    # Save Docker images as tar files (optional, only if you want to transfer images)
+    # Save API Docker image as tar
     - name: Save API Docker image as tar
-      run: docker save $(docker images --format '{{.Repository}}:{{.Tag}}' | grep api | head -n 1) > api.tar
+      run: docker save formula-one-insight-dashboard-api:latest > api.tar
 
-    - name: Test SSH connection
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.VPS_SSH_KEY }}
-        script: |
-          echo "SSH connection successful!"
-          hostname
-          uptime
-          
-    # Copy files to VPS
+    # Copy files to VPS (api.tar and production docker-compose.yml)
     - name: Copy files to VPS
       uses: appleboy/scp-action@v0.1.7
       with:
