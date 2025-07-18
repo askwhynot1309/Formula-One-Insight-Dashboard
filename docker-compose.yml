@@ -16,10 +16,14 @@ services:
       dockerfile: F1API/Dockerfile
     image: formula-one-insight-dashboard-api:latest
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: "Server=db;Database=F1DB;User Id=sa;Password=Tom13092003;TrustServerCertificate=True;"
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=db;Database=F1DB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
+      - Jwt__Key=5b18357f9b011918d9caf82999f19c190f69dfdeeb7933b36098220e9f1f88a9
+      - Jwt__Issuer=FormulaOneInsight
+      - Jwt__Audience=FormulaOneInsightUsers
     ports:
-      - "5000:8080"
+      - "5000:80"
     depends_on:
       - db
 
