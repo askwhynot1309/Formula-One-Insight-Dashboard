@@ -4,17 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
+namespace Models.DTO
 {
-    public class Race
+    public class AddRaceDto
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
         public DateTime Date { get; set; }
-
-        public ICollection<RaceResult> Results { get; set; }
-        public Circuit Circuit { get; set; }
-        public ICollection<Laptime> Laptimes { get; set; }  
+        public int CircuitId { get; set; }
     }
 }

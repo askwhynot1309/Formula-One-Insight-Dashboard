@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.DTO;
 using Repository;
 using Services.Interface;
 using System;
@@ -16,6 +17,12 @@ namespace Services
         {
             _repository = raceRepository;
         }
+
+        public async Task<bool> AddRace(AddRaceDto addRaceDto)
+        {
+            return await _repository.AddRaceAsync(addRaceDto);
+        }
+
         public async Task<List<Race>> GetRaceByCircuit(int circuitId)
         {
             return await _repository.GetRaceByCircuit(circuitId);

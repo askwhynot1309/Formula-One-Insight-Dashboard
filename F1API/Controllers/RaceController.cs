@@ -49,5 +49,20 @@ namespace F1API.Controllers
 
             return Ok(raceDto);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRace([FromBody] AddRaceDto addRaceDto)
+        {
+            if (addRaceDto == null)
+            {
+                return BadRequest(new { message = "Input is empty"});
+            }
+            var check = await _raceService.AddRace(addRaceDto);
+            if (!check)
+            {
+                return BadRequest(new { message = "Input is empty" });
+            }
+            return Ok("New race added");
+        }
     }
 }

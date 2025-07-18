@@ -1,6 +1,7 @@
 ﻿using DAO;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,5 +34,22 @@ namespace Repository
                 .ToListAsync();
         }
 
+        public async Task<bool> AddRaceAsync(AddRaceDto addRaceDto) 
+        {
+            var circuit = await _dbcontext.Circuits.FindAsync(addRaceDto.CircuitId);
+            if (circuit == null) return false;
+
+            var race = new Race
+            {
+                Name = addRaceDto.Name,
+                Country = addRaceDto.Country,
+                Date = addRaceDto.Date,
+                Circuit = circuit,
+            };
+
+            await _dbcontext.Races.AddAsync(race);
+            await _dbcontext.SaveChangesAsync();    
+            return true;
+        }
     }
 }
