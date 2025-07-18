@@ -12,14 +12,26 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # Build Docker images using Compose V2
     - name: Build Docker images
-      run: docker-compose build
+      run: docker compose build
 
-    - name: Save Docker images as tar
-      run: |
-        docker save yourrepo_api:latest > api.tar
-        docker save mcr.microsoft.com/mssql/server:2022-latest > db.tar
+    # Save Docker images as tar files (optional, only if you want to transfer images)
+    - name: Save API Docker image as tar
+      run: docker save $(docker images --format '{{.Repository}}:{{.Tag}}' | grep api | head -n 1) > api.tar
 
+    - name: Test SSH connection
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          echo "SSH connection successful!"
+          hostname
+          uptime
+          
+    # Copy files to VPS
     - name: Copy files to VPS
       uses: appleboy/scp-action@v0.1.7
       with:
@@ -29,6 +41,7 @@ jobs:
         source: "api.tar,docker-compose.yml"
         target: "~/deploy"
 
+    # SSH into VPS and deploy
     - name: SSH and deploy
       uses: appleboy/ssh-action@v1.0.0
       with:
@@ -38,4 +51,4 @@ jobs:
         script: |
           cd ~/deploy
           docker load < api.tar
-          docker-compose up -d
+          docker compose up -d --remove-orphans
