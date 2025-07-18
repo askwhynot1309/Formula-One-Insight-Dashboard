@@ -11,11 +11,11 @@ services:
       - sql_data:/var/opt/mssql
 
   api:
-      build:
-        context: .
-        dockerfile: F1API/Dockerfile
-      image: formula-one-insight-dashboard-api:latest
-      environment:
+    build:
+      context: .
+      dockerfile: F1API/Dockerfile
+    image: formula-one-insight-dashboard-api:latest
+    environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Server=db;Database=F1DB;User Id=sa;Password=12345;TrustServerCertificate=True;"
     ports:
