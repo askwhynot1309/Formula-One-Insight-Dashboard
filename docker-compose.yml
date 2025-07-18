@@ -17,9 +17,9 @@ services:
     image: formula-one-insight-dashboard-api:latest
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: "Server=db;Database=F1DB;User Id=sa;Password=12345;TrustServerCertificate=True;"
+      ConnectionStrings__DefaultConnection: "Server=db;Database=F1DB;User Id=sa;Password=Tom13092003;TrustServerCertificate=True;"
     ports:
-      - "5000:80"
+      - "5000:8080"
     depends_on:
       - db
 
