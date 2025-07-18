@@ -11,7 +11,7 @@ services:
       - sql_data:/var/opt/mssql
 
   api:
-    build:
+      build:
         context: .
         dockerfile: F1API/Dockerfile
       image: formula-one-insight-dashboard-api:latest
