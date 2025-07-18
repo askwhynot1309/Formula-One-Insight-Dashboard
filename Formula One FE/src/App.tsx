@@ -1,4 +1,3 @@
-import React from 'react';
 import { Layout, Menu, Typography, Card, Row, Col, Button } from 'antd';
 import {
   DashboardOutlined,
@@ -20,9 +19,9 @@ import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import Dashboard from './components/Dashboard';
 
-const { Header, Sider, Content, Footer } = Layout;
+
+const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 
 const baseMenuItems = [
@@ -91,7 +90,6 @@ function getSelectedMenuKey(pathname: string, role?: string) {
 }
 
 function AppRoutes() {
-  const { user } = useAuth();
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
