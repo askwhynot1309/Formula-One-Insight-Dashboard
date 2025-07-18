@@ -5,9 +5,8 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY F1API.csproj ./
-RUN dotnet restore "F1API/F1API.csproj"
+RUN dotnet restore "F1API.csproj"
 COPY . .
-WORKDIR "/src/F1API"
 RUN dotnet build "F1API.csproj" -c Release -o /app/build
 
 FROM build AS publish
