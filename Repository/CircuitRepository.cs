@@ -19,6 +19,11 @@ namespace Repository
             return await _context.Circuits.AsQueryable().ToListAsync();
         }
 
+        public async Task<Circuit> GetCircuitByIdAsync(int circuitId)
+        {
+            return await _context.Circuits.FirstOrDefaultAsync(c => c.Id == circuitId);
+        }
+
         public async Task<(Circuit Circuit, List<FastestLapDto> FastestLaps)> GetCircuitDetailsAsync(int circuitId)
         {
             // Get the circuit
@@ -63,6 +68,41 @@ namespace Repository
             }
 
             return (circuit, fastestLaps);
+        }
+
+        public async Task<bool> AddCircuitAsync(AddCircuitDto circuitDto)
+        {
+            var circuit = new Circuit
+            {
+                Name = circuitDto.Name,
+                Description = circuitDto.Description,
+                Type = circuitDto.Type,
+                Location = circuitDto.Location,
+                ImageUrl = circuitDto.ImageUrl,
+            }; 
+
+            await _context.AddAsync(circuit);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateCircuitAsync(int circuitId, CircuitUpdateDto circuitUpdateDto)
+        {
+            var circuit = await GetCircuitByIdAsync(circuitId);
+            if (circuit != null)
+            {
+                circuit.Name = circuitUpdateDto.Name;
+                circuit.Description = circuitUpdateDto.Description;
+                circuit.Type = circuitUpdateDto.Type;
+                circuit.Location = circuitUpdateDto.Location;
+                circuit.ImageUrl = circuitUpdateDto.ImageUrl;
+            } else
+            {
+                return false;
+            }
+            await _context.SaveChangesAsync();
+            return true;
+
         }
     }
 }

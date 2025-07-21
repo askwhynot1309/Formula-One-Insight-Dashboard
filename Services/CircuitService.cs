@@ -19,6 +19,16 @@ namespace Services
             _repository = repository;
         }
 
+        public Task<bool> AddCircuitAsync(AddCircuitDto circuitDto)
+        {
+            return _repository.AddCircuitAsync(circuitDto);
+        }
+
+        public Task<Circuit> GetCircuitAsync(int circuitId)
+        {
+            return _repository.GetCircuitByIdAsync(circuitId);
+        }
+
         public async Task<CircuitDetailsDto> GetCircuitDetailsAsync(int circuitId)
         {
             var (circuit, fastestLaps) = await _repository.GetCircuitDetailsAsync(circuitId);
@@ -38,6 +48,11 @@ namespace Services
         public async Task<List<Circuit>> GetCircuitsAsync()
         {
             return await _repository.GetCircuitsAsync();
+        }
+
+        public async Task<bool> UpdateCircuitAsync(int circuitId, CircuitUpdateDto circuitUpdateDto)
+        {
+            return await _repository.UpdateCircuitAsync(circuitId, circuitUpdateDto);
         }
     }
 }

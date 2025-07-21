@@ -38,5 +38,33 @@ namespace F1API.Controllers
             return Ok(details);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddNewCircuit([FromBody] AddCircuitDto addCircuitDto)
+        {
+            if (addCircuitDto == null)
+            {
+                return BadRequest("Input is empty");
+            }
+            var circuit = await _circuitService.AddCircuitAsync(addCircuitDto);
+            if (!circuit) {
+                return BadRequest("Add new circuit failed");
+            }
+            return Ok(addCircuitDto);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCircuit(int circuitId, [FromBody] CircuitUpdateDto circuitUpdateDto)
+        {
+            if (circuitUpdateDto == null)
+            {
+                return BadRequest("Input is empty");
+            }
+            var update = await _circuitService.UpdateCircuitAsync(circuitId, circuitUpdateDto);
+            if (!update)
+            {
+                return BadRequest("Failed to update");
+            }
+            return Ok(circuitUpdateDto);
+        }
     }
 }
