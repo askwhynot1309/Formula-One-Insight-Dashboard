@@ -26,6 +26,11 @@ namespace Repository
                 .ToListAsync();
         }
 
+        public async Task<Race> GetRaceById(int raceId)
+        {
+            return await _dbcontext.Races.FindAsync(raceId);
+        }
+
         public async Task<List<Race>> GetRaceByCircuit(int circuitId)
         {
             return await _dbcontext.Races.Where(r => r.Circuit.Id == circuitId)
@@ -51,5 +56,27 @@ namespace Repository
             await _dbcontext.SaveChangesAsync();    
             return true;
         }
+
+        public async Task<bool> UpdateRaceAsync(int raceId, RaceUpdateDto raceUpdateDto)
+        {
+            var race = await GetRaceById(raceId);
+            var circuit = await _dbcontext.Circuits.FindAsync(raceUpdateDto.CircuitId);
+            if (raceUpdateDto != null)
+            {
+                race.Name = raceUpdateDto.Name;
+                race.Country = raceUpdateDto.Country;
+                race.Date = raceUpdateDto.Date;
+                race.Circuit = circuit;
+            }
+            else
+            {
+                return false;
+            }
+
+            await _dbcontext.SaveChangesAsync();
+            return true;
+        }
+
+
     }
 }

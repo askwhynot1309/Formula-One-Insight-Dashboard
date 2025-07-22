@@ -60,9 +60,20 @@ namespace F1API.Controllers
             var check = await _raceService.AddRace(addRaceDto);
             if (!check)
             {
-                return BadRequest(new { message = "Input is empty" });
+                return BadRequest(new { message = "Add new race failed!" });
             }
-            return Ok("New race added");
+            return Ok(addRaceDto);
+        }
+
+        [HttpPut("update-race")]
+        public async Task<IActionResult> UpdateRace(int raceId, RaceUpdateDto raceUpdateDto)
+        {
+            var result = await _raceService.UpdateRaceAsync(raceId, raceUpdateDto);
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok(raceUpdateDto);
         }
     }
 }

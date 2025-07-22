@@ -32,5 +32,10 @@ namespace Services
         {
             return await _repository.GetRaceByYear(year);
         }
+
+        public async Task<bool> UpdateRaceAsync(int raceId, RaceUpdateDto raceUpdateDto)
+        {
+            return await _repository.UpdateRaceAsync(raceId, raceUpdateDto);
+        }
     }
 }

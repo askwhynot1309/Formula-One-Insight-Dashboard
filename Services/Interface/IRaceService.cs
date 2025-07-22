@@ -13,5 +13,6 @@ namespace Services.Interface
         Task<List<Race>> GetRaceByYear(int year);
         Task<List<Race>> GetRaceByCircuit(int circuitId);
         Task<bool> AddRace(AddRaceDto addRaceDto);
+        Task<bool> UpdateRaceAsync(int raceId, RaceUpdateDto raceUpdateDto);
     }
 }
